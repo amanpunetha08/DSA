@@ -5,29 +5,24 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def inorder(self,root,ans):
+    def inorder(self,root,prev,first,second):
         if not root:
             return
         
-        self.inorder(root.left,ans)
-        ans.append(root)
-        self.inorder(root.right,ans)
-
+        self.inorder(root.left,prev,first,second)
+        if prev[0] and prev[0].val > root.val:
+            if first[0] is None:
+                first[0] = prev[0]
+            second[0] = root
+        prev[0] = root
+        self.inorder(root.right,prev,first,second)
     def recoverTree(self, root: Optional[TreeNode]) -> None:
         """
         Do not return anything, modify root in-place instead.
         """
-        nodes = []
-        self.inorder(root,nodes)
-
-        first =None
-        second = None
-        for i in range(len(nodes)-1):
-            if nodes[i].val > nodes[i+1].val:
-                if first is None:
-                    first = nodes[i]
-                second = nodes[i+1]
-        
-        first.val,second.val = second.val,first.val
-
+        first = [None]
+        second = [None]
+        prev = [None]
+        self.inorder(root,prev,first,second)
+        first[0].val,second[0].val = second[0].val, first[0].val
         
