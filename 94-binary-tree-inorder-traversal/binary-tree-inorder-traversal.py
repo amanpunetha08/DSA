@@ -16,4 +16,3 @@ class Solution:
         ans = []
         self.printInorderTraversal(root,ans)
         return ans
-        
