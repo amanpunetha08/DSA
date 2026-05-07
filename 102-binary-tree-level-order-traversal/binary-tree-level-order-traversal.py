@@ -4,19 +4,21 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
-from collections import defaultdict
-class Solution:
-    def printLevelOrder(self,root,mapper,level):
-        if not root:
-            return
-        mapper[level].append(root.val)
-        self.printLevelOrder(root.left,mapper,level+1)
-        self.printLevelOrder(root.right,mapper,level+1)
-        return
-
-        
+from collections import deque
+class Solution:        
     def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
-        mapper = defaultdict(list)
-        self.printLevelOrder(root,mapper,0)
-        return list(mapper.values())
+        if not root:
+            return []
+        
+        result = []
+        queue = deque([root])
+        while queue:
+            level = []
+            for _ in range(len(queue)):
+                node = queue.popleft()
+                level.append(node.val)
+                if node.left: queue.append(node.left)
+                if node.right: queue.append(node.right)
+            result.append(level)
+        return result
         
