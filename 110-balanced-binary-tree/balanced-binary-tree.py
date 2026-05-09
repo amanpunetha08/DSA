@@ -8,13 +8,17 @@ class Solution:
     def check(self,root):
         if not root:
             return True,0
-        
         left,left_height = self.check(root.left)
-        right,right_height= self.check(root.right)
-        if not left or not right or abs(left_height - right_height) > 1:
-            return False,max(left_height,right_height) + 1
-        else: return True, max(left_height,right_height) + 1
+        if not left:
+            return False,0
+        right,right_height = self.check(root.right)
+        if not right:
+            return False,0
+        
+        if abs(left_height - right_height) >1:
+            return False,0
+        return True,1 + max(left_height,right_height)
     def isBalanced(self, root: Optional[TreeNode]) -> bool:
-        result,_ = self.check(root)
-        return result
+        resutl,_  = self.check(root)
+        return resutl       
         
