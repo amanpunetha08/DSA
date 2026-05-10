@@ -13,15 +13,21 @@ class Solution:
         if not root:
             return None
         
-        queue = deque([root])
-        while queue:
-            level = []
-            for _ in range(len(queue)):
-                node = queue.popleft()
-                if level:
-                    level[-1].next = node
-                level.append(node)
-                if node.left: queue.append(node.left)
-                if node.right: queue.append(node.right)
+        leftmost = root
+        while leftmost:
+            dummy =Node(0)
+            tail = dummy
+
+            node = leftmost
+            while node:
+                if node.left:
+                    tail.next = node.left
+                    tail = tail.next
+                if node.right:
+                    tail.next = node.right
+                    tail = tail.next
+                node=node.next
+            leftmost = dummy.next
         return root
-        
+
+            
