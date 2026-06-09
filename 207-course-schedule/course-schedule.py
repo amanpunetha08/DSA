@@ -1,22 +1,45 @@
-from collections import deque
+# from collections import deque
+# class Solution:
+#     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+#         graph = [[] for _ in range(numCourses)]
+#         in_degree = [0] * numCourses
+#         for u,v in prerequisites:
+#             graph[v].append(u)
+#             in_degree[u] +=1
+        
+#         q = deque(i for i in range(numCourses) if in_degree[i] == 0)
+#         count = 0
+
+#         while q:
+#             node = q.popleft()
+#             count+=1
+#             for nei in graph[node]:
+#                 in_degree[nei]-=1
+#                 if in_degree[nei] ==0:
+#                     q.append(nei)
+#         return count == numCourses
+
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
         graph = [[] for _ in range(numCourses)]
-        in_degree = [0] * numCourses
         for u,v in prerequisites:
             graph[v].append(u)
-            in_degree[u] +=1
         
-        q = deque(i for i in range(numCourses) if in_degree[i] == 0)
-        count = 0
+        WHITE,GREY,BLACK = 0,1,2
+        color =  [WHITE] * numCourses
 
-        while q:
-            node = q.popleft()
-            count+=1
+        def hasCycle(node):
+            color[node] = GREY
             for nei in graph[node]:
-                in_degree[nei]-=1
-                if in_degree[nei] ==0:
-                    q.append(nei)
-        return count == numCourses
+                if color[nei] == GREY:
+                    return True
+                if color[nei] ==WHITE and hasCycle(nei):
+                    return True
+            color[node]=BLACK
+            return False
+        for i in range(numCourses):
+            if color[i] == WHITE and hasCycle(i):
+                return False
+        return True
 
         
