@@ -1,18 +1,34 @@
+class DSU:
+    def __init__(self,n):
+        self.parent = list(range(n))
+        self.rank = [0] *n
+    
+    def find(self,x):
+        if self.parent[x] !=x:
+            self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+    
+    def union(self,x,y):
+        px,py = self.find(x),self.find(y)
+        if px == py:
+            return False
+        if self.rank[px] < self.rank[py]:
+            px,py = py,px
+        self.parent[py] = px
+        if self.rank[px] == self.rank[py]:
+            self.rank[px]+=1
+        return True
 class Solution:
-    def dfs(self,i,n,visited,isConnected):
-        visited[i] = 1
-        for j in range(n):
-            if isConnected[i][j] ==1 and not visited[j]:
-                self.dfs(j,n,visited,isConnected)
     def findCircleNum(self, isConnected: List[List[int]]) -> int:
         n = len(isConnected)
         m = len(isConnected[0])
-
-        visited = [0] * n
-        count = 0
+        componenets = n
+        dsu = DSU(n)
         for i in range(n):
-            if not visited[i]:
-                self.dfs(i,n,visited,isConnected)
-                count+=1
-        return count
+            for j in range(i+1,m):
+                if isConnected[i][j] == 1:
+                    if dsu.union(i,j):
+                       componenets-=1
+        return componenets 
+
         
